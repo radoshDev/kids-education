@@ -1,0 +1,89 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": [
+		"plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended",
+		"airbnb",
+		"plugin:prettier/recommended",
+		"prettier"
+	],
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx"],
+			"parserOptions": {
+				"project": ["./tsconfig.json"]
+			}
+		}
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"plugins": ["react", "@typescript-eslint", "prettier"],
+	"rules": {
+		"@typescript-eslint/no-use-before-define": ["error", { "typedefs": false }],
+		"@typescript-eslint/no-unused-vars": "warn",
+		"@typescript-eslint/no-inferrable-types": "error",
+		"@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/explicit-module-boundary-types": "warn",
+		"@typescript-eslint/member-delimiter-style": [
+			"error",
+			{
+				"multiline": {
+					"delimiter": "none",
+					"requireLast": true
+				},
+				"singleline": {
+					"delimiter": "semi",
+					"requireLast": false
+				}
+			}
+		],
+		"@typescript-eslint/prefer-ts-expect-error": "error",
+		"@typescript-eslint/explicit-function-return-type": [
+			2,
+			{ "allowExpressions": true }
+		],
+		"@typescript-eslint/no-floating-promises": "error",
+		"import/extensions": [
+			"error",
+			{
+				"js": "never",
+				"jsx": "never",
+				"ts": "never",
+				"tsx": "never"
+			}
+		],
+		"import/no-extraneous-dependencies": "off",
+		"import/prefer-default-export": "off",
+		"no-param-reassign": ["error", { "props": false }],
+		"no-unused-vars": "off",
+		"prefer-const": "warn",
+		"prettier/prettier": "warn",
+		"react/function-component-definition": [
+			2,
+			{ "namedComponents": "arrow-function" }
+		],
+		"react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+		"react/jsx-props-no-spreading": "off",
+		"react/no-array-index-key": "warn",
+		"react/prefer-stateless-function": "off",
+		"react/react-in-jsx-scope": "off",
+		"react/require-default-props": "off",
+		"no-restricted-exports": "off"
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".jsx", ".ts", ".tsx"]
+			}
+		}
+	}
+}
