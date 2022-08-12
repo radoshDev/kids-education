@@ -5,3 +5,8 @@
 body {
 	@apply select-none;
 }
+@layer components {
+	.btn {
+		@apply px-6 py-2 shadow-md rounded text-xl;
+	}
+}

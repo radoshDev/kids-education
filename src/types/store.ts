@@ -1,5 +1,17 @@
-export type WordState = {
+export type Pokemon = {
+	name: string
+	dreamworld: string
+}
+
+export type ExerciseState = {
+	imageIndex: number
+	isExercise: boolean
 	isUpperCase: boolean
 	roundCount: number
-	count: number
+	passedExerciseCount: number
+	cost: number
+}
+
+export type ApiState = {
+	pokemons: Pokemon[]
 }

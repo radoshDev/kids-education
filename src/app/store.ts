@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { wordSlice } from './slices/wordSlice'
+import { apiSlice } from './slices/apiSlice'
+import { exerciseSlice } from './slices/exerciseSlice'
 
 export const store = configureStore({
 	reducer: {
-		[wordSlice.name]: wordSlice.reducer,
+		[exerciseSlice.name]: exerciseSlice.reducer,
+		[apiSlice.name]: apiSlice.reducer,
 	},
 })
 
