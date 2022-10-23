@@ -15,12 +15,11 @@ const App: FC = () => {
 		if (!localStorage.getItem(POKEMONS_STORAGE_KEY)) {
 			getPokemons()
 				.then(data => {
-					console.log(data)
 					dispatch(setPokemons(data))
 					localStorage.setItem(POKEMONS_STORAGE_KEY, JSON.stringify(data))
 				})
 				.catch(error => {
-					console.log(error)
+					console.warn(error)
 				})
 		}
 	}, [])

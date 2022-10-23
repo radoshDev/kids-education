@@ -2,29 +2,38 @@ import { consonants, exclusions, vowels } from '../data/letters'
 import { getRandomIndex } from '../utils/getRandomIndex'
 
 export class Syllable {
+	syllablesList: string[] = []
+
 	vowels = vowels
 
 	consonants = consonants
 
 	exclusions = exclusions
 
-	used: Record<string, number> = {}
-
 	#generateSyllable(): string {
 		const vowelIdx = getRandomIndex(this.vowels.length)
 		const consonantIdx = getRandomIndex(this.consonants.length)
-		const syllable = this.consonants[consonantIdx] + this.vowels[vowelIdx]
+		if (Math.random() > 0.5) {
+			return this.consonants[consonantIdx] + this.vowels[vowelIdx]
+		}
 
-		return syllable
+		return this.vowels[vowelIdx] + this.consonants[consonantIdx]
 	}
 
 	getSyllable(): string {
 		const syllable = this.#generateSyllable()
-		const isThreeTime = this.used[syllable] === 3
-		if (isThreeTime || this.exclusions.includes(syllable)) {
+		const isDuplicate = this.syllablesList.includes(syllable)
+		if (isDuplicate || this.exclusions.includes(syllable)) {
 			return this.getSyllable()
 		}
-		this.used[syllable] = (this.used[syllable] ?? 0) + 1
 		return syllable
+	}
+
+	generateSyllables(count: number): string[] {
+		this.syllablesList = []
+		for (let i = 0; i < count; i++) {
+			this.syllablesList.push(this.getSyllable())
+		}
+		return this.syllablesList
 	}
 }

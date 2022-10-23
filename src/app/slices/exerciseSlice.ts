@@ -3,11 +3,12 @@ import { ExerciseState } from '../../types/store'
 import { RootState } from '../store'
 
 const initialState: ExerciseState = {
+	syllables: [],
 	isMute: false,
 	imageIndex: 0,
 	isExercise: false,
 	isUpperCase: true,
-	round: 1,
+	round: 0,
 	cost: 1,
 	earned: 0,
 	passedExerciseInRound: 0,
@@ -17,6 +18,9 @@ export const exerciseSlice = createSlice({
 	name: 'exercise',
 	initialState,
 	reducers: {
+		setSyllables: (state, action: PayloadAction<string[]>) => {
+			state.syllables = action.payload
+		},
 		toggleCase: state => {
 			state.isUpperCase = !state.isUpperCase
 		},
@@ -26,17 +30,15 @@ export const exerciseSlice = createSlice({
 		nextRound: state => {
 			state.round += 1
 		},
+		refreshExercise: () => initialState,
+		setExercise: (state, action: PayloadAction<boolean>) => {
+			state.isExercise = action.payload
+		},
 		changeExerciseCount: (state, action: PayloadAction<number>) => {
 			state.passedExerciseInRound = action.payload
 		},
 		changeEarned: (state, action: PayloadAction<number>) => {
 			state.earned = action.payload
-		},
-		startExercise: state => {
-			state.isExercise = true
-		},
-		closeExercise: state => {
-			state.isExercise = false
 		},
 		setImageIndex: (state, action: PayloadAction<number>) => {
 			state.imageIndex = action.payload
@@ -50,10 +52,11 @@ export const selectExercise = (state: RootState): ExerciseState =>
 export const {
 	changeEarned,
 	changeExerciseCount,
-	closeExercise,
 	nextRound,
-	startExercise,
+	refreshExercise,
+	setExercise,
 	setImageIndex,
+	setSyllables,
 	toggleCase,
 	toggleMute,
 } = exerciseSlice.actions

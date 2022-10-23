@@ -4,6 +4,7 @@ export type Pokemon = {
 }
 
 export type ExerciseState = {
+	syllables: string[]
 	imageIndex: number
 	isExercise: boolean
 	isMute: boolean

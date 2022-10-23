@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { CgClose } from 'react-icons/cg'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import {
-	closeExercise,
+	setExercise,
 	selectExercise,
 	toggleCase,
 } from '../../app/slices/exerciseSlice'
@@ -14,7 +14,7 @@ const Actions: FC = () => {
 		dispatch(toggleCase())
 	}
 	const handleClose = (): void => {
-		dispatch(closeExercise())
+		dispatch(setExercise(false))
 	}
 	return (
 		<div>

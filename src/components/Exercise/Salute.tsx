@@ -21,6 +21,7 @@ const Salute: FC<Props> = ({ isShow }) => {
 			text: selectedPokemon.name,
 		})
 	}
+
 	return (
 		<div
 			className={`flex-1 flex items-center flex-col justify-center ${

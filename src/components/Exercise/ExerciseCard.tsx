@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { selectPokemons } from '../../app/slices/apiSlice'
 import {
@@ -7,6 +7,7 @@ import {
 	selectExercise,
 	setImageIndex,
 	changeEarned,
+	setSyllables,
 } from '../../app/slices/exerciseSlice'
 import { MAX_COUNT } from '../../constants'
 import useSpeechSynthesis from '../../hooks/useSpeechSynthesis'
@@ -15,19 +16,15 @@ import { convertToRussish } from '../../utils/convertToRussish'
 import { getRandomIndex } from '../../utils/getRandomIndex'
 import Salute from './Salute'
 
-type Props = {
-	words: string[]
-}
-
-const ExerciseCard: FC<Props> = ({ words }) => {
+const ExerciseCard: FC = () => {
 	const dispatch = useAppDispatch()
 	const { speak, voices, speaking } = useSpeechSynthesis()
 	const {
 		passedExerciseInRound: wordIdx,
 		isUpperCase,
-		isMute,
 		earned,
 		cost,
+		syllables,
 	} = useAppSelector(selectExercise)
 	const pokemons = useAppSelector(selectPokemons)
 
@@ -39,12 +36,8 @@ const ExerciseCard: FC<Props> = ({ words }) => {
 	}
 
 	const handleNext = (): void => {
-		if (isMute) {
-			nextSlide()
-			return
-		}
 		speak({
-			text: convertToRussish(words[wordIdx]),
+			text: convertToRussish(syllables[wordIdx]),
 			voice: voices.find(voice => voice.lang === 'ru-RU'),
 			onEnd: nextSlide,
 		})
@@ -53,8 +46,10 @@ const ExerciseCard: FC<Props> = ({ words }) => {
 		const newImageIndex = getRandomIndex(pokemons.length)
 		dispatch(setImageIndex(newImageIndex))
 		dispatch(changeExerciseCount(0))
+		dispatch(setSyllables(new Syllable().generateSyllables(MAX_COUNT)))
 		dispatch(nextRound())
 	}
+
 	const handlePrev = (): void => {
 		if (wordIdx === 0) return
 		if (wordIdx === MAX_COUNT) {
@@ -65,12 +60,12 @@ const ExerciseCard: FC<Props> = ({ words }) => {
 
 	return (
 		<div className="flex-1 flex flex-col items-center mt-2">
-			{words[wordIdx] && (
+			{syllables[wordIdx] && (
 				<p className={`text-[200px] flex-1 ${isUpperCase ? ' uppercase' : ''}`}>
-					{words[wordIdx]}
+					{syllables[wordIdx]}
 				</p>
 			)}
-			<Salute isShow={!words[wordIdx]} />
+			<Salute isShow={!syllables[wordIdx]} />
 			<div className="fixed bottom-0 left-1/2 -translate-x-1/2 mb-4 flex gap-4">
 				<button
 					type="button"
@@ -79,7 +74,7 @@ const ExerciseCard: FC<Props> = ({ words }) => {
 					onClick={handlePrev}>
 					Back
 				</button>
-				{words[wordIdx] ? (
+				{syllables[wordIdx] ? (
 					<button
 						type="button"
 						disabled={speaking}
