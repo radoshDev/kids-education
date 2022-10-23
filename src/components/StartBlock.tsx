@@ -15,15 +15,15 @@ import { getRandomIndex } from '../utils/getRandomIndex'
 const StartBlock: FC = () => {
 	const dispatch = useAppDispatch()
 	const pokemons = useAppSelector(selectPokemons)
-	const { passedExerciseCount, roundCount } = useAppSelector(selectExercise)
+	const { passedExerciseInRound, round } = useAppSelector(selectExercise)
 
-	const isStartedRound = passedExerciseCount > 0 || roundCount > 0
+	const isStartedRound = passedExerciseInRound > 0 || round > 0
 
 	const handleNewRound = (): void => {
 		const imageIndex = getRandomIndex(pokemons.length)
 		const syllablesList = new Syllable().generateSyllables(MAX_COUNT)
-		dispatch(setImageIndex(imageIndex))
 		dispatch(refreshExercise())
+		dispatch(setImageIndex(imageIndex))
 		dispatch(setSyllables(syllablesList))
 		dispatch(setExercise(true))
 	}

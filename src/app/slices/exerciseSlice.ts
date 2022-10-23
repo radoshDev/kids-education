@@ -8,7 +8,7 @@ const initialState: ExerciseState = {
 	imageIndex: 0,
 	isExercise: false,
 	isUpperCase: true,
-	round: 1,
+	round: 0,
 	cost: 1,
 	earned: 0,
 	passedExerciseInRound: 0,
