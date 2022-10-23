@@ -33,7 +33,7 @@ const StartBlock: FC = () => {
 	}
 
 	return (
-		<div className="flex gap-4">
+		<div className="flex gap-4 justify-center flex-wrap">
 			<button
 				type="button"
 				className="btn bg-blue-400 text-2xl uppercase"
