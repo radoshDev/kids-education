@@ -64,7 +64,7 @@ const useSpeechSynthesis: UseSpeechSynthesis = () => {
 			onEnd?.()
 		}
 
-		if (isMute || !supported) {
+		if (isMute || !supported || !text) {
 			setTimeout(handleEnd, 500)
 			return
 		}
