@@ -7,11 +7,12 @@ export type ExerciseState = {
 	syllables: string[]
 	imageIndex: number
 	isExercise: boolean
-	isUpperCase: boolean
 	isMute: boolean
-	roundCount: number
-	passedExerciseCount: number
+	isUpperCase: boolean
+	round: number
+	passedExerciseInRound: number
 	cost: number
+	earned: number
 }
 
 export type ApiState = {
