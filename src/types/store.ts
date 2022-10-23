@@ -6,10 +6,12 @@ export type Pokemon = {
 export type ExerciseState = {
 	imageIndex: number
 	isExercise: boolean
+	isMute: boolean
 	isUpperCase: boolean
-	roundCount: number
-	passedExerciseCount: number
+	round: number
+	passedExerciseInRound: number
 	cost: number
+	earned: number
 }
 
 export type ApiState = {
