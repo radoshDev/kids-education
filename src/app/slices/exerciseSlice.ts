@@ -3,6 +3,8 @@ import { ExerciseState } from '../../types/store'
 import { RootState } from '../store'
 
 const initialState: ExerciseState = {
+	syllables: [],
+	isMute: false,
 	imageIndex: 0,
 	isExercise: false,
 	isUpperCase: true,
@@ -15,6 +17,9 @@ export const exerciseSlice = createSlice({
 	name: 'exercise',
 	initialState,
 	reducers: {
+		setSyllables: (state, action: PayloadAction<string[]>) => {
+			state.syllables = action.payload
+		},
 		toggleCase: state => {
 			state.isUpperCase = !state.isUpperCase
 		},
@@ -24,12 +29,9 @@ export const exerciseSlice = createSlice({
 		handleCount: (state, action: PayloadAction<number>) => {
 			state.passedExerciseCount = action.payload
 		},
-
-		startExercise: state => {
-			state.isExercise = true
-		},
-		closeExercise: state => {
-			state.isExercise = false
+		refreshExercise: () => initialState,
+		setExercise: (state, action: PayloadAction<boolean>) => {
+			state.isExercise = action.payload
 		},
 		setImageIndex: (state, action: PayloadAction<number>) => {
 			state.imageIndex = action.payload
@@ -41,10 +43,11 @@ export const selectExercise = (state: RootState): ExerciseState =>
 	state.exercise
 
 export const {
+	setSyllables,
 	toggleCase,
 	handleRound,
 	handleCount,
-	closeExercise,
-	startExercise,
+	setExercise,
+	refreshExercise,
 	setImageIndex,
 } = exerciseSlice.actions

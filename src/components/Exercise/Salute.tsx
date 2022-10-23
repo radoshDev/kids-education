@@ -12,6 +12,7 @@ const Salute: FC<Props> = ({ isShow }) => {
 	const pokemons = useAppSelector(selectPokemons)
 	const { imageIndex } = useAppSelector(selectExercise)
 	const selectedPokemon = pokemons[imageIndex]
+
 	const speak = (): void => {
 		if (!window.speechSynthesis.speaking) {
 			const speech = getSpeech('en-US')
@@ -20,6 +21,7 @@ const Salute: FC<Props> = ({ isShow }) => {
 			window.speechSynthesis.speak(speech)
 		}
 	}
+
 	return (
 		<div
 			className={`flex-1 flex items-center flex-col justify-center ${

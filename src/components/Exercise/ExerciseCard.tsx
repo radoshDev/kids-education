@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { selectPokemons } from '../../app/slices/apiSlice'
 import {
@@ -6,6 +6,7 @@ import {
 	handleRound,
 	selectExercise,
 	setImageIndex,
+	setSyllables,
 } from '../../app/slices/exerciseSlice'
 import { MAX_COUNT } from '../../constants'
 import { getSpeech } from '../../services/getSpeech'
@@ -17,29 +18,40 @@ import Salute from './Salute'
 const ExerciseCard: FC = () => {
 	const dispatch = useAppDispatch()
 	const [isMute, setIsMute] = useState(false)
-	const [syllables, setSyllables] = useState<string[]>([])
 	const [isSpeaking, setIsSpeaking] = useState(false)
-	const syllableRef = useRef(new Syllable())
 	const speechRef = useRef(getSpeech())
-	const { passedExerciseCount, isUpperCase, roundCount } =
+	const { passedExerciseCount, isUpperCase, roundCount, syllables } =
 		useAppSelector(selectExercise)
 	const pokemons = useAppSelector(selectPokemons)
 	const syllableIdx = passedExerciseCount
 
-	useEffect(() => {
-		setSyllables(syllableRef.current.generateSyllables(MAX_COUNT))
-	}, [])
+	const nextExercise = (): void => {
+		dispatch(handleCount(passedExerciseCount + 1))
+		if (passedExerciseCount + 1 === MAX_COUNT) {
+			dispatch(handleRound(roundCount + 1))
+		}
+	}
 
 	const handleNext = (): void => {
+		setIsSpeaking(true)
 		if (isMute) {
-			dispatch(handleCount(passedExerciseCount + 1))
-			if (passedExerciseCount + 1 === MAX_COUNT) {
-				dispatch(handleRound(roundCount + 1))
-			}
+			setTimeout(() => {
+				nextExercise()
+				setIsSpeaking(false)
+			}, 1000)
 			return
 		}
-		setIsSpeaking(true)
-		speechRef.current.text = convertToRussish(syllables[syllableIdx])
+		const textToSpeak = convertToRussish(syllables[syllableIdx])
+
+		if (!textToSpeak) {
+			setTimeout(() => {
+				nextExercise()
+				setIsSpeaking(false)
+			}, 1000)
+			return
+		}
+
+		speechRef.current.text = textToSpeak
 		window.speechSynthesis.speak(speechRef.current)
 
 		speechRef.current.onend = () => {
@@ -54,8 +66,9 @@ const ExerciseCard: FC = () => {
 		const newImageIndex = getRandomIndex(pokemons.length)
 		dispatch(setImageIndex(newImageIndex))
 		dispatch(handleCount(0))
-		setSyllables(syllableRef.current.generateSyllables(MAX_COUNT))
+		dispatch(setSyllables(new Syllable().generateSyllables(MAX_COUNT)))
 	}
+
 	const handlePrev = (): void => {
 		if (passedExerciseCount === 0) return
 		if (passedExerciseCount === MAX_COUNT) {
