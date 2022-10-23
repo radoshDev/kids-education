@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useAppSelector } from '../app/hooks'
+import { selectExercise } from '../app/slices/exerciseSlice'
 
 type SpeakOptions = {
 	pitch?: number
@@ -21,6 +23,7 @@ const useSpeechSynthesis: UseSpeechSynthesis = () => {
 	const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
 	const [speaking, setSpeaking] = useState(false)
 	const [supported, setSupported] = useState(false)
+	const { isMute } = useAppSelector(selectExercise)
 
 	const getVoices = (): void => {
 		// Firefox seems to have voices upfront and never calls the
@@ -53,17 +56,18 @@ const useSpeechSynthesis: UseSpeechSynthesis = () => {
 			volume = 1,
 			onEnd,
 		} = args
-		if (!supported) return
+
 		setSpeaking(true)
-		// Firefox won't repeat an utterance that has been
-		// spoken, so we need to create a new instance each time
+
 		const handleEnd = (): void => {
 			setSpeaking(false)
-			if (onEnd) {
-				onEnd()
-			}
+			onEnd?.()
 		}
-		console.log(voice)
+
+		if (isMute || !supported) {
+			setTimeout(handleEnd, 500)
+			return
+		}
 
 		const utterance = new window.SpeechSynthesisUtterance()
 		utterance.voice = voice
@@ -72,6 +76,9 @@ const useSpeechSynthesis: UseSpeechSynthesis = () => {
 		utterance.rate = rate
 		utterance.pitch = pitch
 		utterance.volume = volume
+		utterance.onerror = () => {
+			setTimeout(handleEnd, 500)
+		}
 		window.speechSynthesis.speak(utterance)
 	}
 
