@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useAppSelector } from '../../app/hooks'
 import { selectPokemons } from '../../app/slices/apiSlice'
 import { selectExercise } from '../../app/slices/exerciseSlice'
-import { getSpeech } from '../../services/getSpeech'
+import useSpeechSynthesis from '../../hooks/useSpeechSynthesis'
 
 type Props = {
 	isShow: boolean
@@ -11,21 +11,22 @@ type Props = {
 const Salute: FC<Props> = ({ isShow }) => {
 	const pokemons = useAppSelector(selectPokemons)
 	const { imageIndex } = useAppSelector(selectExercise)
+	const { speak, speaking } = useSpeechSynthesis()
 	const selectedPokemon = pokemons[imageIndex]
-	const speak = (): void => {
-		if (!window.speechSynthesis.speaking) {
-			const speech = getSpeech('en-US')
-			speech.text = selectedPokemon.name
-			speech.rate = 0.7
-			window.speechSynthesis.speak(speech)
-		}
+	const handleSpeak = (): void => {
+		if (speaking) return
+
+		speak({
+			rate: 0.7,
+			text: selectedPokemon.name,
+		})
 	}
 	return (
 		<div
 			className={`flex-1 flex items-center flex-col justify-center ${
 				isShow ? '' : 'hidden'
 			}`}>
-			<div role="button" onClick={speak}>
+			<div role="button" onClick={handleSpeak}>
 				<img
 					className="max-h-[250px] h-full object-contain"
 					src={selectedPokemon.dreamworld}

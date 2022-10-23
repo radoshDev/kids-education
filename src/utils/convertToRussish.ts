@@ -4,7 +4,7 @@ export const convertToRussish = (text: string): string => {
 		е: 'э',
 		і: 'и',
 	}
-	const exceptions = ['ця', 'до', 'со', 'ко', 'щи', 'фи', 'ші']
+	const exceptions = ['ця', 'до', 'со', 'ко', 'го', 'щи', 'фи', 'ші']
 	if (exceptions.includes(text)) return ''
 	const updatedArray = text.split('').map(chapter => {
 		if (Object.keys(replaceList).includes(chapter)) {

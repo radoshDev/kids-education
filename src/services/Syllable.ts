@@ -27,12 +27,4 @@ export class Syllable {
 		this.used[syllable] = (this.used[syllable] ?? 0) + 1
 		return syllable
 	}
-
-	generateSyllables(count: number): string[] {
-		const syllables = []
-		for (let i = 0; i < count; i++) {
-			syllables.push(this.getSyllable())
-		}
-		return syllables
-	}
 }
